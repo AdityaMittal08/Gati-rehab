@@ -134,21 +134,21 @@ const DoctorDashboard = () => {
         {/* Modern Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
           <div className="space-y-2">
-            <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-none">
               Clinic <span className="text-blue-600">Overview</span>
             </h1>
-            <p className="text-slate-500 font-bold text-lg flex items-center gap-2">
+            <p className="text-slate-500 font-bold text-sm sm:text-lg flex items-center gap-2">
               <Users className="w-5 h-5" /> Monitoring {patients.length} active recovery journeys
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 bg-white p-2 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white">
-            <div className="relative group">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 bg-white p-2 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white">
+            <div className="relative group flex-1 sm:flex-none">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Search patients..."
-                className="pl-12 pr-6 py-4 bg-slate-50 border-none rounded-2xl text-base w-80 font-bold focus:ring-4 focus:ring-blue-100 transition-all"
+                className="pl-12 pr-6 py-4 bg-slate-50 border-none rounded-2xl text-base w-full sm:w-80 font-bold focus:ring-4 focus:ring-blue-100 transition-all"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

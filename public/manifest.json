@@ -5,18 +5,28 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "theme_color": "#0F172A",
   "orientation": "portrait",
   "scope": "/",
   "icons": [
     {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "/vite.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
-  "categories": ["health", "medical", "fitness"],
+  "categories": [
+    "health",
+    "medical",
+    "fitness"
+  ],
   "prefer_related_applications": false,
   "offline_enabled": true,
   "screenshots": []

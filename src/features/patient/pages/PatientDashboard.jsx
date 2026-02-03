@@ -121,7 +121,7 @@ const PatientDashboard = () => {
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
           <div>
-            <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none mb-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-none mb-4">
               Recovery <span className="text-blue-600">Central</span>
             </h1>
             <div className="flex items-center gap-4">
@@ -144,7 +144,7 @@ const PatientDashboard = () => {
           {/* Main Content Column */}
           <div className="xl:col-span-8 space-y-10">
             {/* Massive Hero Section */}
-            <div className="relative overflow-hidden bg-slate-900 rounded-[3.5rem] p-10 md:p-16 text-white shadow-3xl shadow-slate-900/20">
+            <div className="relative overflow-hidden bg-slate-900 rounded-[2rem] sm:rounded-[3.5rem] p-6 sm:p-10 md:p-16 text-white shadow-3xl shadow-slate-900/20">
               <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 space-y-8">
                   <div className="inline-flex items-center gap-3 bg-blue-500/10 backdrop-blur-3xl px-6 py-2.5 rounded-full border border-blue-500/20">
@@ -152,7 +152,7 @@ const PatientDashboard = () => {
                     <span className="text-sm font-black uppercase tracking-widest">{stats.streak} DAY RECOVERY STREAK</span>
                   </div>
 
-                  <h2 className="text-5xl md:text-6xl font-black leading-none tracking-tighter">
+                  <h2 className="text-3xl sm:text-5xl md:text-6xl font-black leading-none tracking-tighter">
                     Finish your <br />
                     <span className="text-blue-400">daily routine</span>
                   </h2>
@@ -200,38 +200,40 @@ const PatientDashboard = () => {
             </div>
 
             {/* Performance Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
               <StatCard
-                icon={<Zap className="w-6 h-6" />}
-                title="Adherence Rate"
+                icon={<Zap className="w-5 h-5 sm:w-6 sm:h-6" />}
+                title="Adherence"
                 value={`${stats.adherenceRate}%`}
-                trend="+12% vs last week"
+                trend="+12%"
                 color="blue"
               />
               <StatCard
-                icon={<Target className="w-6 h-6" />}
-                title="Weekly Progress"
+                icon={<Target className="w-5 h-5 sm:w-6 sm:h-6" />}
+                title="Weekly"
                 value={`${stats.completed}/${stats.weeklyGoal}`}
-                trend="Sessions finished"
+                trend="Goal"
                 color="indigo"
               />
-              <StatCard
-                icon={<ShieldCheck className="w-6 h-6" />}
-                title="Quality Score"
-                value="A+"
-                trend="Excellent form"
-                color="emerald"
-              />
+              <div className="col-span-2 md:col-span-1">
+                <StatCard
+                  icon={<ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />}
+                  title="Quality"
+                  value="A+"
+                  trend="Excellent"
+                  color="emerald"
+                />
+              </div>
             </div>
 
             {/* Recent Activity Full Section */}
-            <div className="bg-white rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-50 p-10">
-              <div className="flex items-center justify-between mb-12">
+            <div className="bg-white rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-50 p-6 sm:p-10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-12">
                 <div>
-                  <h2 className="text-2xl font-black text-slate-900 leading-none mb-2">Performance History</h2>
-                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Your recovery path records</p>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-none mb-2">Performance History</h2>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Your recovery path records</p>
                 </div>
-                <button className="flex items-center gap-2 text-blue-600 font-black text-sm group">
+                <button className="flex items-center gap-2 text-blue-600 font-black text-xs group text-left">
                   Full Analytics History <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>
@@ -262,9 +264,9 @@ const PatientDashboard = () => {
           {/* Right Sidebar */}
           <div className="xl:col-span-4 space-y-10">
             {/* Quick Progress Summary */}
-            <div className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-slate-200/50 border border-slate-50 overflow-hidden relative group">
+            <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl shadow-slate-200/50 border border-slate-50 overflow-hidden relative group">
               <div className="relative z-10">
-                <h3 className="text-2xl font-black text-slate-900 mb-8">Daily Roadmap</h3>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-6 sm:mb-8">Daily Roadmap</h3>
                 <div className="space-y-6">
                   {todayRoutine.map((ex, idx) => (
                     <div key={idx} className="flex items-center gap-5 p-5 rounded-[2rem] bg-slate-50/50 border border-slate-100/50 hover:bg-white hover:shadow-xl hover:border-blue-100 transition-all group/item">
@@ -289,8 +291,8 @@ const PatientDashboard = () => {
             </div>
 
             {/* Quick Actions Integration */}
-            <div className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-slate-200/50 border border-slate-50">
-              <h3 className="text-2xl font-black text-slate-900 mb-8">Clinical Tools</h3>
+            <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl shadow-slate-200/50 border border-slate-50">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-6 sm:mb-8">Clinical Tools</h3>
               <div className="grid grid-cols-2 gap-4">
                 <ActionTile icon={<Video className="w-6 h-6" />} label="Connect Dr." color="blue" />
                 <ActionTile
@@ -375,14 +377,14 @@ const StatCard = ({ icon, title, value, trend, color }) => {
   };
 
   return (
-    <div className="group bg-white p-8 rounded-[3rem] border border-slate-50 shadow-xl shadow-slate-200/30 transition-all hover:shadow-2xl hover:-translate-y-1">
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-transform group-hover:scale-110 ${colorStyles[color]} border shadow-sm`}>
+    <div className="group bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-slate-50 shadow-xl shadow-slate-200/30 transition-all hover:shadow-2xl hover:-translate-y-1">
+      <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-8 transition-transform group-hover:scale-110 ${colorStyles[color]} border shadow-sm`}>
         {icon}
       </div>
-      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">{title}</p>
-      <h4 className="text-4xl font-black text-slate-900 leading-none mb-3">{value}</h4>
-      <p className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
-        <span className={color === 'emerald' ? 'text-emerald-500' : 'text-blue-500'}>{trend.split(' ')[0]}</span> {trend.split(' ').slice(1).join(' ')}
+      <p className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">{title}</p>
+      <h4 className="text-2xl sm:text-4xl font-black text-slate-900 leading-none mb-2 sm:mb-3">{value}</h4>
+      <p className="text-[10px] sm:text-xs font-bold text-slate-400 flex items-center gap-1.5">
+        <span className={color === 'emerald' ? 'text-emerald-500' : 'text-blue-500'}>{trend}</span>
       </p>
     </div>
   );
@@ -399,12 +401,12 @@ const ActionTile = ({ icon, label, color, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`flex flex-col items-center justify-center p-6 rounded-[2.5rem] border transition-all shadow-sm hover:shadow-xl hover:-translate-y-1 group ${styles[color]}`}
+      className={`flex flex-col items-center justify-center p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2.5rem] border transition-all shadow-sm hover:shadow-xl hover:-translate-y-1 group ${styles[color]}`}
     >
-      <div className="mb-4 transition-transform group-hover:scale-110">
+      <div className="mb-2 sm:mb-4 transition-transform group-hover:scale-110">
         {icon}
       </div>
-      <span className="text-[10px] font-black uppercase tracking-widest text-center leading-tight">{label}</span>
+      <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-center leading-tight">{label}</span>
     </button>
   );
 };
