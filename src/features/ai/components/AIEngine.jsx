@@ -1,0 +1,312 @@
+// AIEngine Component - Core AI/Camera View
+// Handles MediaPipe Pose Landmark detection and real-time pose tracking
+// Owner: Sumit Prasad
+
+import { useEffect, useRef, useState } from 'react';
+import Webcam from 'react-webcam';
+import { Camera, Video, VideoOff, AlertCircle } from 'lucide-react';
+import { calculateAngles } from '../utils/angleCalculations';
+import { generateRealTimeFeedback, playAudioCue } from '../utils/realTimeFeedback';
+
+const AIEngine = ({ onPoseDetected, exerciseType, onFeedbackUpdate }) => {
+  const webcamRef = useRef(null);
+  const canvasRef = useRef(null);
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [error, setError] = useState(null);
+  const [fps, setFps] = useState(0);
+  const poseDetectorRef = useRef(null);
+  const lastFrameTimeRef = useRef(Date.now());
+  const frameCountRef = useRef(0);
+  const previousAnglesRef = useRef({});
+
+  // Initialize MediaPipe Pose Landmarker
+  useEffect(() => {
+    const loadModel = async () => {
+      try {
+        const { PoseLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
+        
+        const vision = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+        );
+
+        poseDetectorRef.current = await PoseLandmarker.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',
+            delegate: 'GPU',
+          },
+          runningMode: 'VIDEO',
+          numPoses: 1,
+        });
+
+        setIsModelLoaded(true);
+        console.log('[AIEngine] MediaPipe Pose model loaded successfully');
+      } catch (err) {
+        console.error('[AIEngine] Error loading model:', err);
+        setError('Failed to load AI model. Please refresh the page.');
+      }
+    };
+
+    loadModel();
+
+    return () => {
+      if (poseDetectorRef.current) {
+        poseDetectorRef.current.close();
+      }
+    };
+  }, []);
+
+  // Prediction loop for continuous pose detection
+  useEffect(() => {
+    let animationFrameId;
+
+    const detectPose = async () => {
+      if (
+        !isCameraActive ||
+        !isModelLoaded ||
+        !webcamRef.current ||
+        !webcamRef.current.video ||
+        webcamRef.current.video.readyState !== 4
+      ) {
+        animationFrameId = requestAnimationFrame(detectPose);
+        return;
+      }
+
+      const video = webcamRef.current.video;
+      const canvas = canvasRef.current;
+
+      if (canvas) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+      }
+
+      try {
+        const results = poseDetectorRef.current.detectForVideo(video, Date.now());
+
+        if (results.landmarks && results.landmarks.length > 0) {
+          const landmarks = results.landmarks[0]; // Get first person's landmarks (33 keypoints)
+
+          // Convert landmarks to array format for angle calculations
+          const keypoints = landmarks.map(landmark => ({
+            x: landmark.x,
+            y: landmark.y,
+            z: landmark.z,
+            visibility: landmark.visibility,
+          }));
+
+          // Calculate angles
+          const angles = calculateAngles(keypoints);
+
+          if (angles) {
+            // Generate real-time feedback
+            const feedback = generateRealTimeFeedback(angles, exerciseType, {
+              previousAngles: previousAnglesRef.current,
+            });
+
+            // Play audio cue if needed
+            if (feedback.audioCue && feedback.severity === 'error') {
+              playAudioCue(feedback.audioCue);
+            }
+
+            // Update parent component
+            if (onPoseDetected) {
+              onPoseDetected({
+                keypoints,
+                angles,
+                feedback,
+                timestamp: Date.now(),
+              });
+            }
+
+            // Update feedback display
+            if (onFeedbackUpdate) {
+              onFeedbackUpdate(feedback);
+            }
+
+            // Store for next frame comparison
+            previousAnglesRef.current = angles;
+          }
+
+          // Draw landmarks on canvas
+          drawLandmarks(keypoints, canvas);
+
+          // Calculate and update FPS
+          frameCountRef.current++;
+          const now = Date.now();
+          if (now - lastFrameTimeRef.current >= 1000) {
+            setFps(frameCountRef.current);
+            frameCountRef.current = 0;
+            lastFrameTimeRef.current = now;
+          }
+        }
+      } catch (err) {
+        console.error('[AIEngine] Detection error:', err);
+      }
+
+      animationFrameId = requestAnimationFrame(detectPose);
+    };
+
+    if (isCameraActive && isModelLoaded) {
+      detectPose();
+    }
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isCameraActive, isModelLoaded, onPoseDetected, onFeedbackUpdate, exerciseType]);
+
+  // Draw pose landmarks on canvas
+  const drawLandmarks = (keypoints, canvas) => {
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Define connections between keypoints (pose skeleton)
+    const connections = [
+      [11, 13], [13, 15], // Left arm
+      [12, 14], [14, 16], // Right arm
+      [11, 12], // Shoulders
+      [11, 23], [12, 24], // Torso
+      [23, 25], [25, 27], // Left leg
+      [24, 26], [26, 28], // Right leg
+      [27, 29], [29, 31], // Left foot
+      [28, 30], [30, 32], // Right foot
+    ];
+
+    // Draw connections
+    ctx.strokeStyle = '#00ff00';
+    ctx.lineWidth = 2;
+    connections.forEach(([start, end]) => {
+      const p1 = keypoints[start];
+      const p2 = keypoints[end];
+
+      if (p1 && p2 && p1.visibility > 0.5 && p2.visibility > 0.5) {
+        ctx.beginPath();
+        ctx.moveTo(p1.x * canvas.width, p1.y * canvas.height);
+        ctx.lineTo(p2.x * canvas.width, p2.y * canvas.height);
+        ctx.stroke();
+      }
+    });
+
+    // Draw keypoints
+    keypoints.forEach((keypoint, index) => {
+      if (keypoint.visibility > 0.5) {
+        const x = keypoint.x * canvas.width;
+        const y = keypoint.y * canvas.height;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#00ff00';
+        ctx.fill();
+
+        // Draw visibility indicator
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '10px Arial';
+        ctx.fillText(index, x + 8, y - 8);
+      }
+    });
+  };
+
+  const toggleCamera = () => {
+    setIsCameraActive(!isCameraActive);
+  };
+
+  return (
+    <div className="relative w-full max-w-2xl mx-auto">
+      {/* Camera Status */}
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Camera className="w-5 h-5 text-blue-600" />
+          <span className="text-sm font-medium">
+            {isModelLoaded ? 'AI Model Ready' : 'Loading AI Model...'}
+          </span>
+          {isCameraActive && (
+            <span className="text-xs text-gray-600 ml-2">
+              FPS: {fps}
+            </span>
+          )}
+        </div>
+        <button
+          onClick={toggleCamera}
+          className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 ${
+            isCameraActive
+              ? 'bg-red-500 hover:bg-red-600 text-white'
+              : 'bg-blue-500 hover:bg-blue-600 text-white'
+          }`}
+          disabled={!isModelLoaded}
+        >
+          {isCameraActive ? (
+            <>
+              <VideoOff className="w-4 h-4" />
+              Stop Camera
+            </>
+          ) : (
+            <>
+              <Video className="w-4 h-4" />
+              Start Camera
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Camera View */}
+      <div className="relative bg-gray-900 rounded-lg overflow-hidden shadow-xl">
+        {isCameraActive ? (
+          <>
+            <Webcam
+              ref={webcamRef}
+              audio={false}
+              className="w-full h-auto"
+              screenshotFormat="image/jpeg"
+              videoConstraints={{
+                facingMode: 'user',
+                width: 1280,
+                height: 720,
+              }}
+            />
+            {/* Canvas overlay for drawing pose landmarks */}
+            <canvas
+              ref={canvasRef}
+              className="absolute top-0 left-0 w-full h-full"
+            />
+          </>
+        ) : (
+          <div className="aspect-video flex items-center justify-center bg-gray-800">
+            <div className="text-center text-white">
+              <Camera className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg">Camera is off</p>
+              <p className="text-sm text-gray-400 mt-2">
+                Click "Start Camera" to begin
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Error Display */}
+      {error && (
+        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-red-900">Error:</p>
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Exercise Info */}
+      {exerciseType && (
+        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm font-medium text-blue-900">
+            Current Exercise: <span className="font-bold">{exerciseType}</span>
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AIEngine;

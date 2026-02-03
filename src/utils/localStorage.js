@@ -16,15 +16,15 @@ export const saveSessionData = (sessionData) => {
   try {
     const existingData = getSessionData();
     const updatedData = [...existingData, { ...sessionData, timestamp: Date.now() }];
-    
+
     localStorage.setItem(STORAGE_KEYS.SESSION_DATA, JSON.stringify(updatedData));
     console.log('[localStorage] Session data saved:', sessionData);
-    
+
     // Add to pending sync queue if offline
     if (!navigator.onLine) {
       addToPendingSync(sessionData);
     }
-    
+
     return true;
   } catch (error) {
     console.error('[localStorage] Error saving session data:', error);
@@ -54,7 +54,7 @@ export const addToPendingSync = (data) => {
   try {
     const pendingData = getPendingSync();
     pendingData.push({ ...data, addedAt: Date.now() });
-    
+
     localStorage.setItem(STORAGE_KEYS.PENDING_SYNC, JSON.stringify(pendingData));
     console.log('[localStorage] Added to pending sync queue');
     return true;
@@ -145,7 +145,7 @@ export const getStorageInfo = () => {
   try {
     const sessionData = getSessionData();
     const pendingSync = getPendingSync();
-    
+
     return {
       totalSessions: sessionData.length,
       pendingSyncCount: pendingSync.length,
@@ -160,3 +160,43 @@ export const getStorageInfo = () => {
     };
   }
 };
+
+/**
+ * Generic Save to LocalStorage
+ */
+export const saveToLocalStorage = (key, data) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+    return true;
+  } catch (error) {
+    console.error(`[localStorage] Error saving to ${key}:`, error);
+    return false;
+  }
+};
+
+/**
+ * Generic Get from LocalStorage
+ */
+export const getFromLocalStorage = (key) => {
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  } catch (error) {
+    console.error(`[localStorage] Error reading from ${key}:`, error);
+    return null;
+  }
+};
+
+/**
+ * Generic Clear from LocalStorage
+ */
+export const clearFromLocalStorage = (key) => {
+  try {
+    localStorage.removeItem(key);
+    return true;
+  } catch (error) {
+    console.error(`[localStorage] Error clearing ${key}:`, error);
+    return false;
+  }
+};
+
