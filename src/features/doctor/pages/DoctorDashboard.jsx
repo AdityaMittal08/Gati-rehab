@@ -138,7 +138,7 @@ const DoctorDashboard = () => {
               Clinic <span className="text-blue-600">Overview</span>
             </h1>
             <p className="text-slate-500 font-bold text-sm sm:text-lg flex items-center gap-2">
-              <Users className="w-5 h-5" /> Monitoring {patients.length} active recovery journeys
+              <Users className="w-5 h-5" /> Monitoring {patients.length} active rehabilitation plans
             </p>
           </div>
 
