@@ -15,10 +15,13 @@ const NavHeader = ({ userType = 'patient', doctorProfile = null, onSettingsClick
 
   const handleLogout = async () => {
     try {
+      console.log('[NavHeader] Logout initiated');
       await logout();
-      navigate('/login');
+      console.log('[NavHeader] Logout successful, navigating to login');
+      navigate('/login', { replace: true });
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error('[NavHeader] Logout failed:', error);
+      alert('Logout failed. Please try again.');
     }
   };
 

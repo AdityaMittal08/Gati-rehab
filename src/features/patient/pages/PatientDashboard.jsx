@@ -180,77 +180,75 @@ const PatientDashboard = () => {
 
 
 
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
-          {/* Main Content Column */}
-          <div className="xl:col-span-12 space-y-10">
-            {/* Massive Hero Section */}
-            <div className="relative overflow-hidden bg-[#0A0F1D] rounded-[3.5rem] p-8 sm:p-14 lg:p-20 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
-              {/* Animated Mesh Gradients */}
-              <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse"></div>
-              <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-              <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-emerald-600/10 rounded-full blur-[100px]"></div>
+        {/* Main Content - Single Column Layout */}
+        <div className="space-y-10">
+          {/* Massive Hero Section */}
+          <div className="relative overflow-hidden bg-[#0A0F1D] rounded-[3.5rem] p-8 sm:p-14 lg:p-20 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
+            {/* Animated Mesh Gradients */}
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-emerald-600/10 rounded-full blur-[100px]"></div>
 
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-                  <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-2xl px-6 py-3 rounded-full border border-white/10 mb-8 shadow-inner">
-                    <Flame className="w-5 h-5 text-orange-400 animate-bounce" />
-                    <span className="text-xs font-black uppercase tracking-[0.3em] font-mono">{stats.streak} DAY RECOVERY STREAK</span>
-                  </div>
-
-                  <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-none tracking-tighter mb-8 bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
-                    Ready for your <br />
-                    <span className="text-blue-500">session?</span>
-                  </h2>
-
-                  <p className="text-slate-400 text-lg sm:text-xl font-bold max-w-lg mb-12 leading-relaxed opacity-90">
-                    Your neural-motor patterns are optimizing. Complete today's program to maintain momentum.
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row gap-6">
-                    <button
-                      onClick={() => navigate('/workout')}
-                      className="group relative bg-blue-600 text-white px-12 py-6 rounded-[2.5rem] font-black flex items-center justify-center gap-4 hover:bg-blue-500 hover:scale-[1.05] transition-all transform active:scale-95 shadow-[0_20px_40px_rgba(37,99,235,0.4)] overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                      <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-all shadow-inner">
-                        <Play className="w-6 h-6 fill-white" />
-                      </div>
-                      <span className="text-xl tracking-tight">Resume Session</span>
-                    </button>
-                    <button
-                      onClick={() => setPlanOpen(true)}
-                      className="px-10 py-6 rounded-[2.5rem] font-black bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-xl shadow-xl hover:border-white/20 active:scale-95"
-                    >
-                      Plan Strategy
-                    </button>
-                  </div>
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+                <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-2xl px-6 py-3 rounded-full border border-white/10 mb-8 shadow-inner">
+                  <Flame className="w-5 h-5 text-orange-400 animate-bounce" />
+                  <span className="text-xs font-black uppercase tracking-[0.3em] font-mono">{stats.streak} DAY RECOVERY STREAK</span>
                 </div>
 
-                <div className="flex flex-col items-center justify-center">
-                  {/* Circular Progress Indicator */}
-                  <div className="relative w-64 h-64 sm:w-80 sm:h-80 group cursor-default">
-                    <div className="absolute inset-0 bg-blue-500/5 rounded-full blur-[40px] group-hover:bg-blue-500/20 transition-all duration-700"></div>
-                    <svg className="w-full h-full transform -rotate-90 filter drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                      {/* Background Ring */}
-                      <circle cx="50%" cy="50%" r="42%" stroke="currentColor" strokeWidth="16" fill="transparent" className="text-white/5" />
-                      {/* Glowing Progress Ring */}
-                      <circle cx="50%" cy="50%" r="42%" stroke="currentColor" strokeWidth="16" fill="transparent"
-                        strokeDasharray="264"
-                        strokeDashoffset={264 - (264 * (stats.completed / (stats.weeklyGoal || 1)))}
-                        strokeLinecap="round"
-                        className="text-blue-500 transition-all duration-1000 ease-out" />
-                      {/* Secondary inner ring for depth */}
-                      <circle cx="50%" cy="50%" r="35%" stroke="currentColor" strokeWidth="2" fill="transparent" className="text-white/10" strokeDasharray="5,10" />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <div className="text-center">
-                        <span className="block text-6xl sm:text-7xl font-black text-white tracking-tighter">
-                          {Math.round((stats.completed / (stats.weeklyGoal || 1)) * 100)}%
-                        </span>
-                        <div className="flex items-center justify-center gap-2 mt-2">
-                          <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                          <span className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">Compliance Optimized</span>
-                        </div>
+                <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-none tracking-tighter mb-8 bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+                  Ready for your <br />
+                  <span className="text-blue-500">session?</span>
+                </h2>
+
+                <p className="text-slate-400 text-lg sm:text-xl font-bold max-w-lg mb-12 leading-relaxed opacity-90">
+                  Your neural-motor patterns are optimizing. Complete today's program to maintain momentum.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-6">
+                  <button
+                    onClick={() => navigate('/workout')}
+                    className="group relative bg-blue-600 text-white px-12 py-6 rounded-[2.5rem] font-black flex items-center justify-center gap-4 hover:bg-blue-500 hover:scale-[1.05] transition-all transform active:scale-95 shadow-[0_20px_40px_rgba(37,99,235,0.4)] overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-all shadow-inner">
+                      <Play className="w-6 h-6 fill-white" />
+                    </div>
+                    <span className="text-xl tracking-tight">Resume Session</span>
+                  </button>
+                  <button
+                    onClick={() => setPlanOpen(true)}
+                    className="px-10 py-6 rounded-[2.5rem] font-black bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-xl shadow-xl hover:border-white/20 active:scale-95"
+                  >
+                    Plan Strategy
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center justify-center">
+                {/* Circular Progress Indicator */}
+                <div className="relative w-64 h-64 sm:w-80 sm:h-80 group cursor-default">
+                  <div className="absolute inset-0 bg-blue-500/5 rounded-full blur-[40px] group-hover:bg-blue-500/20 transition-all duration-700"></div>
+                  <svg className="w-full h-full transform -rotate-90 filter drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                    {/* Background Ring */}
+                    <circle cx="50%" cy="50%" r="42%" stroke="currentColor" strokeWidth="16" fill="transparent" className="text-white/5" />
+                    {/* Glowing Progress Ring */}
+                    <circle cx="50%" cy="50%" r="42%" stroke="currentColor" strokeWidth="16" fill="transparent"
+                      strokeDasharray="264"
+                      strokeDashoffset={264 - (264 * (stats.completed / (stats.weeklyGoal || 1)))}
+                      strokeLinecap="round"
+                      className="text-blue-500 transition-all duration-1000 ease-out" />
+                    {/* Secondary inner ring for depth */}
+                    <circle cx="50%" cy="50%" r="35%" stroke="currentColor" strokeWidth="2" fill="transparent" className="text-white/10" strokeDasharray="5,10" />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <div className="text-center">
+                      <span className="block text-6xl sm:text-7xl font-black text-white tracking-tighter">
+                        {Math.round((stats.completed / (stats.weeklyGoal || 1)) * 100)}%
+                      </span>
+                      <div className="flex items-center justify-center gap-2 mt-2">
+                        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                        <span className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">Compliance Optimized</span>
                       </div>
                     </div>
                   </div>
@@ -259,7 +257,7 @@ const PatientDashboard = () => {
             </div>
           </div>
 
-          {/* Daily Roadmap - MOVED TO TOP FOR ACCESSIBILITY */}
+          {/* Daily Roadmap */}
           <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-xl shadow-slate-200/40 border border-slate-100">
             <div className="flex items-center justify-between mb-8">
               <div>

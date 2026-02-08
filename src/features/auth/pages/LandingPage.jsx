@@ -1,6 +1,6 @@
 // LandingPage - Public splash/marketing page
 import { useNavigate } from 'react-router-dom';
-import { Activity, Smartphone, Wifi, Brain, Heart, TrendingUp, CheckCircle, ArrowRight } from 'lucide-react';
+import { Activity, Smartphone, Wifi, Brain, Heart, TrendingUp, CheckCircle, ArrowRight, Zap, Github, ExternalLink } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -61,9 +61,21 @@ const LandingPage = () => {
       <nav className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Activity className="w-8 h-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">Gati Rehab</h1>
+            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
+              <div className="relative">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-slate-200 border border-slate-100 p-1 group-hover:rotate-6 transition-transform">
+                  <img src="/logo.png" alt="Gati Logo" className="w-full h-full object-contain" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow-sm flex items-center justify-center">
+                  <Zap className="w-2 h-2 text-white fill-current" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-black tracking-tighter leading-none text-slate-900">
+                  GATI<span className="text-blue-600">REHAB</span>
+                </h1>
+                <p className="text-[7px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mt-0.5">Intelligence Lab</p>
+              </div>
             </div>
             <button
               onClick={() => navigate('/login')}
@@ -217,7 +229,14 @@ const LandingPage = () => {
             <div className="bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl p-8 lg:p-12 transform transition-all duration-500 hover:scale-[1.01]">
               <div className="bg-white rounded-xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl">
                 <div className="flex items-center gap-3 mb-4">
-                  <Activity className="w-8 h-8 text-blue-600" />
+                  <div className="relative">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-slate-200 border border-slate-100 p-1">
+                      <img src="/logo.png" alt="Gati Logo" className="w-full h-full object-contain" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow-sm flex items-center justify-center">
+                      <Zap className="w-2 h-2 text-white fill-current" />
+                    </div>
+                  </div>
                   <h4 className="text-xl font-bold text-gray-900">Ready to Start?</h4>
                 </div>
                 <p className="text-gray-600 mb-6">
@@ -244,13 +263,29 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Activity className="w-6 h-6" />
-                <h5 className="text-xl font-bold">Gati Rehab</h5>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative">
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg p-1">
+                    <img src="/logo.png" alt="Gati Logo" className="w-full h-full object-contain" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-gray-900 shadow-sm flex items-center justify-center">
+                    <Zap className="w-2 h-2 text-white fill-current" />
+                  </div>
+                </div>
+                <div>
+                  <h5 className="text-xl font-black tracking-tighter leading-none">
+                    GATI<span className="text-blue-500">REHAB</span>
+                  </h5>
+                  <p className="text-[8px] font-black text-gray-500 uppercase tracking-[0.2em]">Intelligence Lab</p>
+                </div>
               </div>
-              <p className="text-gray-400">
+              <p className="text-gray-400 mb-4">
                 AI-powered virtual rehabilitation assistant for better recovery outcomes
               </p>
+              <div className="flex items-center gap-2 px-3 py-2 bg-emerald-900/30 border border-emerald-700/30 rounded-lg w-fit">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Open Source</span>
+              </div>
             </div>
 
             <div>
@@ -265,6 +300,18 @@ const LandingPage = () => {
                   <button onClick={() => navigate('/login')} className="hover:text-white transition-colors">
                     Sign Up
                   </button>
+                </li>
+                <li>
+                  <a 
+                    href="https://github.com/Heal-gorithms/Gati-rehab" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors flex items-center gap-2 group"
+                  >
+                    <Github className="w-4 h-4" />
+                    GitHub Repository
+                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
                 </li>
               </ul>
             </div>
@@ -282,6 +329,9 @@ const LandingPage = () => {
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2026 Gati Rehab. Built with ❤️ for better health outcomes.</p>
+            <p className="text-xs mt-2 text-gray-500">
+              Made with passion by the <a href="https://github.com/Heal-gorithms" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">Heal-gorithms</a> team
+            </p>
           </div>
         </div>
       </footer>

@@ -10,7 +10,7 @@ export const getGeminiResponse = async (prompt, history = []) => {
             throw new Error("Gemini API Key is missing. Please add VITE_GEMINI_API_KEY to your .env file.");
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
         const chat = model.startChat({
             history: history.map(msg => ({
@@ -33,7 +33,7 @@ export const getGeminiResponse = async (prompt, history = []) => {
 
 export const generatePatientReport = async (patientData, format = 'Clinical Summary') => {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
         const prompt = `
       Act as a professional Clinical Physiotherapist Assistant. 
