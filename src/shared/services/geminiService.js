@@ -1,8 +1,7 @@
-
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(API_KEY);
+const genAI = new GoogleGenAI(API_KEY);
 
 export const getGeminiResponse = async (prompt, history = []) => {
     try {
@@ -33,7 +32,7 @@ export const getGeminiResponse = async (prompt, history = []) => {
 
 export const generatePatientReport = async (patientData, format = 'Clinical Summary') => {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
         const prompt = `
       Act as a professional Clinical Physiotherapist Assistant. 
