@@ -58,6 +58,7 @@ import {
   subscribeToWeeklySessions,
   getPainHistory
 } from '../services/patientService';
+import { DEMO_CREDENTIALS, subscribeToUserData } from '../../auth/services/authService';
 import { calculateDailyPlan } from '../engine/rehabEngine';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../../lib/firebase/config';
@@ -86,6 +87,7 @@ const PatientDashboard = () => {
   const [selectedRoom, setSelectedRoom] = useState('');
   const [planOpen, setPlanOpen] = useState(false);
   const [trendsOpen, setTrendsOpen] = useState(false);
+  const [currentDoctor, setCurrentDoctor] = useState(null);
 
   const handleSettingsUpdate = async (data) => {
     try {
@@ -95,6 +97,20 @@ const PatientDashboard = () => {
       console.error('[PatientDashboard] Settings update failed:', error);
     }
   };
+
+  // Sync Doctor Profile in real-time if linked
+  useEffect(() => {
+    if (!userData?.doctorId) {
+      setCurrentDoctor(null);
+      return;
+    }
+
+    const unsubscribe = subscribeToUserData(userData.doctorId, (docData) => {
+      setCurrentDoctor(docData);
+    });
+
+    return () => unsubscribe();
+  }, [userData?.doctorId]);
 
   useEffect(() => {
     if (!user) return;
@@ -446,7 +462,7 @@ const PatientDashboard = () => {
                   <div>
                     <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.3em] mb-1">Upcoming Session</p>
                     <h3 className="text-3xl font-black text-slate-900 leading-tight">
-                      {upcomingAppts[0].type} with {userData?.doctorName || 'Specialist'}
+                      {upcomingAppts[0].type} with {currentDoctor?.name || userData?.doctorName || 'Specialist'}
                     </h3>
                     <p className="text-slate-500 font-bold">
                       {new Date(upcomingAppts[0].date).toLocaleDateString()} at {upcomingAppts[0].time}
@@ -476,11 +492,15 @@ const PatientDashboard = () => {
                   <UserCircle className="w-10 h-10 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-1">Your Specialist</p>
+                  <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-1">
+                    {userData?.doctorId ? 'Your Specialist' : 'System Intelligence'}
+                  </p>
                   <h3 className="text-3xl font-black text-slate-900 leading-tight">
-                    {userData?.doctorName || 'Dr. Gati (Default)'}
+                    {currentDoctor?.name || userData?.doctorName || 'Gati AI Digital Specialist'}
                   </h3>
-                  <p className="text-slate-500 font-bold">Leading Physical Rehabilitation Specialist</p>
+                  <p className="text-slate-500 font-bold">
+                    {userData?.doctorId ? (currentDoctor?.specialization || 'Professional Rehabilitation Specialist') : 'Autonomous Diagnostic Engine'}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-4 w-full md:w-auto">

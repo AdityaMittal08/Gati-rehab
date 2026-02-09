@@ -41,10 +41,10 @@ const DoctorProfileCard = ({ doctorProfile, onEditClick }) => {
             </div>
           </div>
 
-          <h2 className="text-3xl font-black tracking-tight mb-2 leading-none">{doctorProfile.name}</h2>
+          <h2 className="text-3xl font-black tracking-tight mb-2 leading-none">{doctorProfile.name || 'Clinical Specialist'}</h2>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full border border-white/10 backdrop-blur-md">
             <Briefcase className="w-3.5 h-3.5 text-blue-400" />
-            <span className="text-xs font-black uppercase tracking-widest text-slate-300">{doctorProfile.specialization || 'Physiotherapist'}</span>
+            <span className="text-xs font-black uppercase tracking-widest text-slate-300">{doctorProfile.specialization || 'Rehabilitation Lead'}</span>
           </div>
         </div>
 

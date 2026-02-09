@@ -131,7 +131,7 @@ const NavHeader = memo(({ userType = 'patient', doctorProfile = null, onSettings
                 </div>
                 <div className="hidden lg:block text-left mr-2">
                   <p className={`${isDark ? 'text-white' : 'text-slate-900'} text-xs sm:text-sm font-black leading-tight`}>
-                    {profile?.name?.split(' ')[0] || (userType === 'patient' ? 'Patient' : 'Doctor')}
+                    {profile?.name?.split(' ')[0] || (userType === 'patient' ? 'Patient' : 'Health Specialist')}
                   </p>
                   <p className="text-[8px] sm:text-[9px] text-blue-500 uppercase tracking-widest font-black">
                     {userType}
